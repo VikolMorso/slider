@@ -1,0 +1,81 @@
+import React, { useState, useEffect } from 'react';
+import './App.css';
+
+
+const Polz = (props) =>{
+
+    const [valueFrom, setValueFrom] = useState(null)
+    const [valueTo, setValueTo] = useState(null)
+  
+    const mas = [1,2,3,4,5,6,7,8,9,10]
+  
+    const changeValue = (e) =>{
+     if (valueFrom && valueTo){
+       setValueTo(null)
+       setValueFrom(null)
+  
+     } else{
+  if (!valueFrom){
+        setValueFrom(+e.currentTarget.id+1)
+    
+      } else{
+        setValueTo(+e.currentTarget.id+1)
+      }
+  
+     }
+      
+  
+    }
+
+    useEffect(()=>{
+        if(valueTo && valueFrom && valueTo < valueFrom){
+            setValueFrom(valueTo)
+            setValueTo(valueFrom)
+        }
+      
+      }, [valueFrom, valueTo])
+      
+
+// green and yellow is style.css
+
+const [hover, setToggleHover] = useState(null)
+const style = (m) =>{
+    if(valueFrom === m){
+        return 'green'
+    }
+    if (valueFrom && !valueTo){
+        if (hover < valueFrom ){
+           if (hover <= m && m <= valueFrom){
+               return 'green'
+           }
+        } else if (hover > valueFrom){
+            if (hover >= m && m >= valueFrom){
+                return 'green'
+            }
+        }
+    } else{
+        if ((valueFrom <= m && m <= valueTo) || valueTo === m || valueFrom === m){
+            return 'green'
+        } else{
+            return 'yellow'
+    }
+
+    }
+    return 'yellow'
+}
+
+    return(
+        <div>
+          <div className='num'>{mas.map((m, i)=> 
+          <span key={i} id={i} 
+          onClick={(e)=> changeValue(e)} 
+          onMouseEnter={(e)=>setToggleHover(+e.currentTarget.id+1)}
+          className={style(m)}>
+              {m}
+              </span>)}
+              </div>
+        </div>
+    )
+}
+
+export default Polz
